@@ -1,16 +1,12 @@
-from mcp.server.auth.provider import TokenVerifier
-from mcp.server.auth.provider import AccessToken
-from mcp.server.auth.settings import AuthSettings
-from pathlib import Path
 import datetime
+from pathlib import Path
 from typing import Any
 
 import jwt
+from starlette.types import Scope
 
 DOMAIN = "https://awesome-mcp.com"
 PUBLIC_KEY = (Path(__file__).parents[1] / "static" / "public_key.pem").read_text()
-
-ALLOWED_ORIGINS = ["http://localhost:6274"]
 
 
 def generate_token(domain: str, client_id: str, lifetime: int, kid: str = "1") -> str:
@@ -24,8 +20,11 @@ def generate_token(domain: str, client_id: str, lifetime: int, kid: str = "1") -
         "scope": "mcp:full_access",
     }
 
-    private_key = (Path(__file__).parents[1] / "static" / "private_key.pem").read_bytes()
+    private_key = (
+        Path(__file__).parents[1] / "static" / "private_key.pem"
+    ).read_bytes()
     return jwt.encode(payload, private_key, algorithm="RS256", headers={"kid": "1"})
+
 
 def verify_token(token: str) -> dict[str, Any]:
     try:
@@ -40,3 +39,26 @@ def verify_token(token: str) -> dict[str, Any]:
 
     return payload
 
+
+async def ratelimit_auth_function(scope: Scope):
+    """
+    Find the user id for rate limiting. We try the following order:
+        - get the client ID from the JWT
+        - use the client's IP address
+    """
+
+    for header_name, header_value in scope["headers"]:
+        if header_name.lower() == b"authorization":
+            token = header_value.decode("utf-8")
+            break
+    else:
+        return scope["client"][0], "default"
+
+    try:
+        assert token.startswith("Bearer ")
+        payload = verify_token(token[7:])
+        assert "sub" in payload
+    except AssertionError:
+        return scope["client"][0], "default"
+
+    return payload["sub"], "authenticated"

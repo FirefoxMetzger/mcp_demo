@@ -8,7 +8,7 @@ import logging
 import json
 from pathlib import Path
 from ..lib.auth import verify_token
-import time
+from ..lib.session_storage import IPDB
 
 DOMAIN = "https://awesome-mcp.com"
 RIDDLES = json.loads(
@@ -33,34 +33,7 @@ class APIKeyValidation(TokenVerifier):
         )
 
 
-# super epic in-process NoSQL database
-# (aka poor mans redis)
-class IPDB:
-    def __init__(self, lifetime: int):
-        self.db = {}
-        self.lifetime = lifetime
-
-    def __getitem__(self, key):
-        value, expiry = self.db[key]
-        if time.time() > expiry:
-            raise KeyError(f"Key {key} has expired.")
-        return value
-
-    def __setitem__(self, key, value):
-        # occasionally clean up stale items to avoid memory leaks
-        if len(self.db) > 100000:
-            current_time = time.time()
-            self.db = {k: v for k, v in self.db.items() if v[1] > time.time()}
-
-        self.db[key] = (value, time.time() + self.lifetime)
-
-    def __delitem__(self, key):
-        del self.db[key]
-
-
-otp_db = IPDB(lifetime=300)
-
-
+session_store = IPDB(lifetime=300)
 riddles_mcp = FastMCP(
     "Riddle MCP",
     token_verifier=APIKeyValidation(),
@@ -86,7 +59,7 @@ def get_riddle(ctx: Context) -> str:
     riddle_id = randint(0, len(RIDDLES) - 1)
     riddle = RIDDLES[riddle_id]
 
-    otp_db[session_id] = riddle
+    session_store[session_id] = riddle
     return riddle["riddle"]
 
 
@@ -101,7 +74,7 @@ def validate_riddle_answer(answer: str, ctx: Context) -> str:
     session_id = ctx.request_context.request.headers["mcp-session-id"]
 
     try:
-        riddle_data = otp_db[session_id]
+        riddle_data = session_store[session_id]
     except KeyError:
         logger.warning(f"No riddle found for session {session_id}")
         return "No riddle has been given yet."
