@@ -18,6 +18,8 @@ allowed_ips = [
     "34.67.146.145", 
     "34.59.11.47",
     "127.0.0.1",
+    "192.168.65.1",
+    "10.0.0.230"
 ]
 
 # TODO: Validate the origin of the request
@@ -27,7 +29,7 @@ app.add_middleware(RateLimitMiddleware, ratelimit_auth_function, MemoryBackend()
     "/mcp": [Rule(second=10, minute=20), Rule(second=10, minute=60, group="authenticated")],
     r".*": [Rule(second=10, minute=20), Rule(second=10, minute=60, group="authenticated")]
 })
-app.add_middleware(IPWhitelistMiddleware, allowed_ips=allowed_ips)
+# app.add_middleware(IPWhitelistMiddleware, allowed_ips=allowed_ips)
 
 if __name__ == "__main__":
     import uvicorn

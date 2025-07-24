@@ -2,7 +2,6 @@ from starlette.applications import Starlette
 from starlette.routing import Route
 
 import logging
-from pathlib import Path
 
 from starlette.applications import Starlette
 from starlette.routing import Route
