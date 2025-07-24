@@ -4,6 +4,9 @@ FROM python:3.12-slim
 # Install uv (https://github.com/astral-sh/uv)
 RUN pip install --no-cache-dir uv
 
+# Expose the port uvicorn will run on
+EXPOSE 8000
+
 # Set workdir
 WORKDIR /app
 
@@ -17,8 +20,8 @@ RUN uv sync
 COPY main.py .
 COPY src/ ./src/
 
-# Expose the port uvicorn will run on
-EXPOSE 8000
+ARG domain=mcp-demo.wallkotter.com
+ENV domain=${domain}
 
 CMD ["uv", "run", \
      "uvicorn", \

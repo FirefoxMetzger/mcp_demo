@@ -16,7 +16,7 @@ from cryptography.hazmat.primitives import serialization
 import base64
 
 
-SUBDOMAIN = os.getenv("TF_VAR_cloudflare_subdomain")
+DOMAIN = os.getenv("domain")
 PRIVATE_KEY_PATH = Path(__file__).parents[1] / "private_token_key.pem"
 PUBLIC_KEY_PATH = Path(__file__).parents[1] / "src" / "static" / "public_token_key.pem"
 API_KEY_FILE = Path(__file__).parents[1] / "auth_token.txt"
@@ -33,12 +33,11 @@ def int_to_base64url(value):
     return base64.urlsafe_b64encode(value_bytes).rstrip(b"=").decode("ascii")
 
 
-domain = f"{SUBDOMAIN}.wallkotter.com"
 now = datetime.datetime.now(datetime.timezone.utc)
 payload = {
-    "iss": f"https://{domain}",
+    "iss": f"https://{DOMAIN}",
     "sub": "elevenlabs-agent",
-    "aud": f"https://{domain}/mcp",
+    "aud": f"https://{DOMAIN}/mcp",
     "iat": now,
     "exp": now + datetime.timedelta(days=90),
     "scope": "mcp:full_access",

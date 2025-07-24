@@ -4,13 +4,14 @@ from mcp.server.auth.provider import AccessToken
 from mcp.server.auth.settings import AuthSettings
 from mcp.server.fastmcp import Context
 from random import randint
+import os
 import logging
 import json
 from pathlib import Path
 from ..lib.auth import verify_token
 from ..lib.session_storage import IPDB
 
-DOMAIN = "https://awesome-mcp.com"
+DOMAIN = os.getenv("domain")
 RIDDLES = json.loads(
     (Path(__file__).parents[1] / "static" / "riddles.json").read_text()
 )

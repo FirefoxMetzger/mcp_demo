@@ -1,11 +1,12 @@
 import datetime
 from pathlib import Path
 from typing import Any
+import os
 
 import jwt
 from starlette.types import Scope
 
-DOMAIN = "https://mcp-demo.wallkotter.com"
+DOMAIN = f"https://{os.getenv('domain')}"
 PUBLIC_KEY = (Path(__file__).parents[1] / "static" / "public_token_key.pem").read_text()
 
 

@@ -8,7 +8,7 @@ mkdir -p scripts/certs/work
 mkdir -p scripts/certs/config
 
 
-DOMAIN=${TF_VAR_cloudflare_subdomain}.wallkotter.com
+DOMAIN=${domain}
 uv run certbot certonly \
     --staging \
     --agree-tos \
