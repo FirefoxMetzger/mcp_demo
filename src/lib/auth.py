@@ -1,4 +1,3 @@
-import datetime
 from pathlib import Path
 from typing import Any
 import os
@@ -8,24 +7,6 @@ from starlette.types import Scope
 
 DOMAIN = f"https://{os.getenv('domain')}"
 PUBLIC_KEY = (Path(__file__).parents[1] / "static" / "public_token_key.pem").read_text()
-
-
-def generate_token(domain: str, client_id: str, lifetime: int, kid: str = "1") -> str:
-    now = datetime.datetime.now(datetime.timezone.utc)
-    payload = {
-        "iss": f"https://{domain}",
-        "sub": client_id,
-        "aud": f"{domain}/mcp",
-        "iat": now,
-        "exp": now + datetime.timedelta(seconds=lifetime),
-        "scope": "mcp:full_access",
-    }
-
-    private_key = (
-        Path(__file__).parents[1] / "static" / "private_key.pem"
-    ).read_bytes()
-    return jwt.encode(payload, private_key, algorithm="RS256", headers={"kid": "1"})
-
 
 def verify_token(token: str) -> dict[str, Any]:
     try:
