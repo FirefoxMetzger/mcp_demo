@@ -10,7 +10,6 @@ mkdir -p scripts/certs/config
 
 DOMAIN=${domain}
 uv run certbot certonly \
-    --staging \
     --agree-tos \
     --non-interactive \
     --dns-cloudflare \

@@ -1,0 +1,16 @@
+#cloud-config
+users:
+  - name: mcp-user
+    groups: docker
+    shell: /bin/bash
+
+
+runcmd:
+  # Configure docker to use the GCP credentials
+  - su -c 'docker-credential-gcr configure-docker -registries gcr.io' mcp-user
+  
+  # Pull the latest image
+  - su -c 'docker pull gcr.io/${google_project_id}/mcp-server:latest' mcp-user
+  
+  # Run the MCP server container
+  - su -c 'docker run -d --name mcp-server --restart unless-stopped -p 443:8000 gcr.io/${google_project_id}/mcp-server:latest' mcp-user
