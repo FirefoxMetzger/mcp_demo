@@ -43,3 +43,5 @@ override.tf.json
 
 gcp-service-creds.json
 scripts/certs/
+src/static/
+auth_token.txt
