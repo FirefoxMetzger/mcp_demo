@@ -12,10 +12,9 @@ go from zero to production with minimal effort.
 
 The deployment targets apps that need to serve low-to-medium traffic (100 - 1000
 req/s) with good avaiability (99.95% uptime). This means you should expect this
-server to handle anything below 500 concurrent users without issue (exact
-numbers are use-case dependent).
+server to handle anything below 500 concurrent users without issues.
 
-**Why this project?**
+## Why this project?
 
 - **Skip DevOps Overkill:** No need for a 6-instance, multi-AZ k8s cluster to serve 100 users. Start small, then scale.
 - **Bring your own MCP:** Comes with HTTPS and API key auth for direct integration
