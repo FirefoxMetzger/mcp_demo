@@ -20,7 +20,7 @@ RUN uv sync
 COPY main.py .
 COPY src/ ./src/
 
-ARG domain=mcp-demo.wallkotter.com
+ARG domain
 ENV domain=${domain}
 
 CMD ["uv", "run", \

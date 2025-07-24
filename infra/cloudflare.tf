@@ -2,6 +2,10 @@
 variable "cloudflare_api_token" {}
 variable "cloudflare_subdomain" {}
 
+locals {
+  mcp_domain = "${var.cloudflare_subdomain}.${data.cloudflare_zone.domain.name}"
+}
+
 provider "cloudflare" {
   api_token = var.cloudflare_api_token
 }
@@ -14,7 +18,7 @@ data "cloudflare_zone" "domain" {
 # Example A record
 resource "cloudflare_dns_record" "mcp-demo" {
   zone_id = data.cloudflare_zone.domain.zone_id
-  name    = var.cloudflare_subdomain
+  name    = local.mcp_domain
   content = google_compute_address.public.address
   type    = "A"
   ttl     = 1 # Auto
@@ -24,10 +28,8 @@ resource "cloudflare_dns_record" "mcp-demo" {
 # Wait for DNS propagation before setting PTR record
 resource "time_sleep" "dns_propagation" {
   depends_on = [cloudflare_dns_record.mcp-demo]
-  
+
   create_duration = "10s"
 }
 
-locals {
-  mcp_domain = "${cloudflare_dns_record.mcp-demo.name}.${data.cloudflare_zone.domain.name}"
-}
+

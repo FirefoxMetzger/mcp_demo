@@ -49,7 +49,7 @@ resource "google_compute_instance" "mcp_server" {
   metadata = {
     google-logging-enabled    = "true"
     google-monitoring-enabled = "true"
-    user-data                = templatefile("${path.module}/cloud-init.yml", {
+    user-data = templatefile("${path.module}/cloud-init.yml", {
       google_project_id = var.google_project_id
     })
   }
@@ -79,8 +79,13 @@ resource "google_compute_firewall" "mcp_server_https" {
     ports    = ["443"]
   }
 
-  direction     = "INGRESS"
-  source_ranges = ["0.0.0.0/0"]
-  target_tags   = ["mcp-server"]
-  description   = "Allow HTTPS traffic to MCP server on port 443"
+  direction = "INGRESS"
+  source_ranges = [
+    # Elevenlabs IP addresses
+    # source: https://elevenlabs.io/docs/conversational-ai/workflows/post-call-webhooks#ip-whitelisting
+    "34.67.146.145/32",
+    "34.59.11.47/32", 
+  ]
+  target_tags = ["mcp-server"]
+  description = "Allow HTTPS traffic to MCP server on port 443"
 }
