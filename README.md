@@ -17,12 +17,11 @@ numbers are use-case dependent).
 
 **Why this project?**
 
-- **Skip the DevOps Overkill:** No need for a 6-instance, multi-AZ k8s cluster
-  just to serve a handful of users. Start small, then scale.
-- **AI & API Ready:** Comes with HTTPS and API key auth for direct integration
+- **Skip DevOps Overkill:** No need for a 6-instance, multi-AZ k8s cluster to serve 100 users. Start small, then scale.
+- **Bring your own MCP:** Comes with HTTPS and API key auth for direct integration
   with tools like ElevenLabs, n8n, and more.
-- **Demo-Ready:** Share your work with and prove it works on *their* machine.
-- **Learn by Doing:** Don't let deployment stop you from learning about AI.
+- **Fast Prototyping:** Demo your work and prove it works on *their* machine.
+- **Learning by Doing:** Don't let deployment stop you from learning about AI.
 
 ## Cost
 
