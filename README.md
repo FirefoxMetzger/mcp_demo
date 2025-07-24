@@ -19,7 +19,7 @@ server to handle anything below 500 concurrent users without issues.
 - **Skip DevOps Overkill:** No need for a 6-instance, multi-AZ k8s cluster to serve 100 users. Start small, then scale.
 - **Bring your own MCP:** Comes with HTTPS and API key auth for direct integration
   with tools like ElevenLabs, n8n, and more.
-- **Fast Prototyping:** Demo your work and prove it works on *their* machine.
+- **Fast Prototyping:** Don't just demo the project, let them try on *their* machine.
 - **Learning by Doing:** Don't let deployment stop you from learning about AI.
 
 ## Cost
