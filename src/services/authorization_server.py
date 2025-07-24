@@ -2,6 +2,7 @@ from starlette.applications import Starlette
 from starlette.routing import Route
 
 import logging
+from pathlib import Path
 
 from starlette.applications import Starlette
 from starlette.routing import Route
@@ -9,6 +10,7 @@ from starlette.requests import Request
 from starlette.responses import JSONResponse
 
 import base64
+import json
 
 from ..lib.auth import generate_token
 
@@ -17,6 +19,7 @@ DOMAIN = "https://awesome-mcp.com"
 KNOWN_CLIENTS = {
     "elevenlabs-agent": "super-secret-key",
 }
+JWKS = json.loads((Path(__file__).parents[1] / "static" / "jwks.json").read_text())
 
 
 def oauth_authorization_server(request: Request) -> str:
@@ -39,7 +42,7 @@ def oauth_authorization_server(request: Request) -> str:
             "grant_types_supported": ["client_credentials"],
             "scopes_supported": ["mcp:full_access"],
             "token_endpoint_auth_methods_supported": ["client_secret_basic"],
-            "jwks_uri": f"https://{DOMAIN}/jwks"
+            "jwks_uri": f"https://{DOMAIN}/.well-known/jwks",
         }
     )
 
@@ -103,25 +106,12 @@ async def get_token(request: Request) -> str:
 
 
 def get_jwks(request: Request) -> JSONResponse:
-    return JSONResponse(
-        {
-            "keys": [
-                {
-                    "kid": "1",
-                    "kty": "RSA",
-                    "alg": "RS256",
-                    "use": "sig",
-                    "n": "jwIVyehBNh92ld-fBJMeV7-wQtZA4ZXqpxvGXVtDhBypxQ64AHm4fs6MoXzQc5SNxgaZJrU-yIwPbeAwhoLMC023ya7QdCYlB3t0nKjHvFPPXhhCKHCrsMK4DaQcKja-L9-7OFP-AXKwjXutJt9QV09pcAT7doBsGkZIFOUBPLSnKdNZqVMxZXCrHoB2zORC_SSNtOeBN_10fCMGLACmMiugSyVhuG6h5Rd-MxPqpyexcEUJPJj8WjJsVe-ytBnqkG4gegtnd1Ruzt6j7u1qG58URiEBvgv-2MzNvlyZeIVLDDe7nJPr_kHmEgSlWOJ77XuoxPsksHd8wOZFExdN4w",
-                    "e": "AQAB",
-                }
-            ]
-        }
-    )
+    return JSONResponse(JWKS)
 
 
 auth_server = Starlette(
     routes=[
-        Route("/jwks", get_jwks),
+        Route("/.well-known/jwks", get_jwks),
         Route("/.well-known/oauth-authorization-server", oauth_authorization_server),
         Route("/token", get_token, methods=["POST"]),
     ],

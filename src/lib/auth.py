@@ -5,8 +5,8 @@ from typing import Any
 import jwt
 from starlette.types import Scope
 
-DOMAIN = "https://awesome-mcp.com"
-PUBLIC_KEY = (Path(__file__).parents[1] / "static" / "public_key.pem").read_text()
+DOMAIN = "https://mcp-demo.wallkotter.com"
+PUBLIC_KEY = (Path(__file__).parents[1] / "static" / "public_token_key.pem").read_text()
 
 
 def generate_token(domain: str, client_id: str, lifetime: int, kid: str = "1") -> str:
@@ -34,7 +34,7 @@ def verify_token(token: str) -> dict[str, Any]:
     except jwt.PyJWTError as e:
         raise AssertionError("Failed to decrypt token") from e
 
-    assert payload["iss"] == f"https://{DOMAIN}", f"Invalid issuer: {payload['iss']}"
+    assert payload["iss"] == DOMAIN, f"Invalid issuer: {payload['iss']}"
     assert payload["scope"] == "mcp:full_access", f"Invalid scope: {payload['scope']}"
 
     return payload
