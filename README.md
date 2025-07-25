@@ -24,9 +24,9 @@ server to handle anything below 500 concurrent users without issues.
 
 ## Cost
 
-Running this server 24/7 will cost about 1-2 beers per month in infrastructure
-costs. I am happy to give you my code for free, but I can't give you a server
-or domain name to run this on.
+Running this server 24/7 will cost about 1-2 beers per month for infrastructure.
+I am happy to give you my code for free, but I can't give you a server or domain
+name to run this on.
 
 That said, the project has an intentionally small footprint that fits entirely
 into the GCP free-tier if you are eligible. The main thing you need to pay for
@@ -43,13 +43,6 @@ is a custom domain so that you can `https://mcp-server...`.
 - 🔒 SSL certificate from Let’s Encrypt (90-day validity)
 - ☁️ Terraform IaC for GCP ([google.tf](infra/google.tf)) and Cloudflare ([cloudflare.tf](infra/cloudflare.tf))
 - 🛡️ IP whitelisting
-
-## What you bring
-
-- A set of MCP tools, resources, or prompts you would like to deploy.
-- A domain that you own.
-- A GCP account to deploy into.
-- A Cloudflare account to manage the domain and DNS.
 
 ## 🚀 Get Started
 
