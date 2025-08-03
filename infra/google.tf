@@ -81,11 +81,9 @@ resource "google_compute_firewall" "mcp_server_https" {
 
   direction = "INGRESS"
   source_ranges = [
-    # Elevenlabs IP addresses
-    # source: https://elevenlabs.io/docs/conversational-ai/workflows/post-call-webhooks#ip-whitelisting
-    "34.67.146.145/32",
-    "34.59.11.47/32", 
+    "0.0.0.0/0"
   ]
+
   target_tags = ["mcp-server"]
   description = "Allow HTTPS traffic to MCP server on port 443"
 }
