@@ -50,10 +50,17 @@ is a custom domain so that you can `https://mcp-server...`.
 
 > **Note**: Please check out the accompanying blog post for a quick-start guide.
 
-Check out my [blog post](#) for the quick-start guide and walkthrough of
-the repo with tips on customizing your own setup. Whether you want to build your
-own tools, deploy a prototype, or just lean and experiment, you’ll find
-everything you need to get going.
+Check out my [blog post](#) for the quick-start guide and walkthrough of the
+repo with tips on customizing your own setup. Whether you want to build your own
+tools, deploy a prototype, or just lean and experiment, you’ll find everything
+you need to get going.
 
 
 Ready to deploy? Clone the repo and follow along!
+
+## Attribution Notice
+
+For the example MCP (US weather) I found a useful list of cities and their
+coordinates on
+[Simplemaps](https://simplemaps.com/data/us-cities?utm_source=chatgpt.com). The
+file [city_coords.json](src/static/city_coords.json) is based on their data.
