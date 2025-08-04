@@ -59,7 +59,7 @@ resource "google_compute_instance" "mcp_server" {
     access_config {
       nat_ip                 = google_compute_address.public.address
       network_tier           = "STANDARD"
-      public_ptr_domain_name = local.mcp_domain
+      public_ptr_domain_name = "${local.mcp_domain}."
     }
   }
 
