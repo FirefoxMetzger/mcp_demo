@@ -63,11 +63,29 @@ async def make_nws_request(url: str) -> dict[str, Any] | None:
 
 
 @weather_mcp.tool()
-async def get_forcast(city_string: str) -> Dict[str, Any]:
+async def get_forcast(city_string: str) -> Dict[str, Any]|str:
     """Get the weather forecast for a city.
 
+    Use this tool to get the current weather in a city alongside any active alerts.
+
     Args:
-        city: City name (can include state for disambiguation, e.g. "New York, NY")
+        city_string: The name of the city, potentially including the state's
+        full name for disambiguation. If the state is given it is separated from
+        the city by a comma and single space (", "). Examples: "New York",
+        "Boston, Massachusetts", "Palo Alto, California"
+
+    Example:
+        User: "What is the weather in Michigan Detroit?"
+        Tool call: get_forecast("Detroit, Michigan")
+
+    Example:
+        User: "I wonder how hot it is in Boston Massachusetts?"
+        Tool call: get_forecast("Boston, Massachusetts")
+
+    Example:
+        User: "Can I go surfing in San Francisco?"
+        Tool call: get_forecast("San Francisco, California")
+
     """
 
     if ", " not in city_string and city_string not in unique_names:
